@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+    
+   <TextView
+        android:id="@+id/e_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"     
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"
+        android:text="zone" />
+   <TextView
+        android:id="@+id/e_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"     
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"
+        android:text="Summary" />
+   
+   <TextView
+        android:id="@+id/e_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"     
+        android:textSize="42sp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+    
+        android:layout_marginBottom="5dp"
+        android:text="" />
+   <TextView
+        android:id="@+id/e_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"     
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom ="true"
+        android:gravity="bottom"
+        android:text="Temperature" />
+   
+  <TextView
+        android:id="@+id/e_day1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"     
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"
+        android:text="day1" />
+<TextView
+        android:id="@+id/e_day2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"     
+        android:textSize="18sp"
+        android:layout_marginBottom="5dp"
+        android:text="day2" />
+</LinearLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:onClick="refresh"
+    android:orientation="vertical" >
+
+  <TextView
+      android:id="@+id/e_zone"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="33dp"
+      
+      android:text="zone"
+      android:textSize="28sp" />
+
+   <TextView
+       android:id="@+id/e_icon"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/e_zone"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="122dp"
+       android:text="icon"
+       android:textSize="72sp"
+       android:textStyle="bold" />
+
+   <TextView
+       android:id="@+id/e_sum"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/e_icon"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="36dp"
+       android:text="Summary"
+       android:textSize="22sp" />
+
+   <TextView
+       android:id="@+id/e_temp"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       android:layout_marginBottom="16dp"
+       android:gravity="bottom"
+       android:text="Temperature"
+       android:textSize="48sp"
+       android:textStyle="bold" />
+
+</RelativeLayout>
+
