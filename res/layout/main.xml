@@ -22,7 +22,7 @@
        android:layout_height="wrap_content"
        android:layout_centerHorizontal="true"
        android:layout_below="@+id/e_zone"
-       android:text="08/12/2015"
+       android:text=""
        android:textSize="18sp" />
 
    <TextView
@@ -67,7 +67,7 @@
        android:layout_alignParentRight="true" 
        android:layout_marginBottom="10dp"
        android:layout_marginRight="10dp"
-       android:onClick="cal_screen"
+       android:onClick="call_screen"
        android:background="@null"
        android:src="@drawable/cal" />
 

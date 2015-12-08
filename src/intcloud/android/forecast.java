@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +24,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 
 public class forecast extends Activity {
@@ -45,8 +45,7 @@ public class forecast extends Activity {
 			String summary;
 		}
 	   List<List_item> daily_forcast = new ArrayList<List_item>();
-	   //List_item[] daily_forcast = new Array;
-	   
+		   
 	   ListAdapter MyListAdapter;	           
 	  
 	   
@@ -66,16 +65,11 @@ public class forecast extends Activity {
 			//e_day2 = (TextView) findViewById(R.id.e_day2);
 			Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/weather.ttf");
 			e_icon.setTypeface(tf);
-			
-			
-			
+		
 	   
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-//        	 RelativeLayout bgElement = (RelativeLayout) findViewById(R.id.forecast);
-
-//	    	 bcolor = Integer.parseInt(extras.getString("bcolor"));
-//	    	 bgElement.setBackgroundColor(bcolor);    	 
+    	 
             String data= extras.getString("data");
           //  Toast.makeText(getBaseContext(), "" + data.length(), Toast.LENGTH_LONG).show();
            parse_result(data);
@@ -83,6 +77,16 @@ public class forecast extends Activity {
         
         ListView listView = (ListView) findViewById(R.id.mobile_list);
 	    listView.setAdapter(MyListAdapter);
+	    listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				gohome(arg1);
+			
+
+			}
+		});
     }
     
 	   
@@ -142,19 +146,6 @@ public class forecast extends Activity {
 	    
 	    public List<List_item> getDataForListView()
 	    {
-	    	/*
-	    	List<List_item> itemslist = new ArrayList<List_item>();
-	    	
-	    	for(int i=0;i<8;i++)
-	    	{
-	    		List_item item = new List_item();
-	    		item.temperature = "Chapter "+i;
-	    		item.summary = "This is description for chapter "+i;
-	    		itemslist.add(item);
-	    	}
-	    	
-	    	return itemslist;
-	    	*/
 	    	return daily_forcast;
 	    }
 	    
@@ -165,7 +156,7 @@ public class forecast extends Activity {
 		switch (icon_str){
 		case "clear": code = getString(R.string.wi_day_sunny); bcolor = android.graphics.Color.CYAN; break;
 		case "clear-day": code = getString(R.string.wi_day_sunny); bcolor = android.graphics.Color.YELLOW; break;
-		case "clear-night": code = getString(R.string.wi_night_clear); bcolor = android.graphics.Color.DKGRAY; break;
+		case "clear-night": code = getString(R.string.wi_night_clear); bcolor = android.graphics.Color.CYAN; break;
 		case "rain": code = getString(R.string.wi_day_showers); bcolor = android.graphics.Color.GREEN; break;
 		case "wind": code = getString(R.string.wi_day_cloudy_windy); bcolor = android.graphics.Color.CYAN; break;
 		case "fog": code = getString(R.string.wi_day_fog); bcolor = android.graphics.Color.GRAY; break;
@@ -205,8 +196,8 @@ public class forecast extends Activity {
 	    	    str =sys.getString("icon");
 	    		
 	    	    e_icon.setText(get_icon_code(str));
-	    	   // RelativeLayout bgElement = (RelativeLayout) findViewById(R.id.container);
-	    	   // bgElement.setBackgroundColor(bcolor);
+	    	   	 RelativeLayout bgElement = (RelativeLayout) findViewById(R.id.forecast);
+	          	 bgElement.setBackgroundColor(bcolor);   
 	    	   
 	    	    //get daily forecast
 	    	    sys  = json.getJSONObject("daily");

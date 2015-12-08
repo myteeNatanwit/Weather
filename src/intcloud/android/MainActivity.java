@@ -69,8 +69,7 @@ public class MainActivity extends Activity {
 		e_temp = (TextView) findViewById(R.id.e_temp);
 		e_sum = (TextView) findViewById(R.id.e_sum);
 		updatefield = (TextView) findViewById(R.id.updatefield);
-		//e_day1 = (TextView) findViewById(R.id.e_day1);
-		//e_day2 = (TextView) findViewById(R.id.e_day2);
+
 		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/weather.ttf");
 		e_icon.setTypeface(tf);
 	
@@ -80,7 +79,7 @@ public class MainActivity extends Activity {
 			locationListner = new MyLocationListner();
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 					0, locationListner);	
-			Toast.makeText(getBaseContext(), "Loading data ...", Toast.LENGTH_LONG).show();
+		//	Toast.makeText(getBaseContext(), "Loading data ...", Toast.LENGTH_LONG).show();
         }
 		else{
 			e_zone.setText("You are not connected");
@@ -91,12 +90,11 @@ public class MainActivity extends Activity {
 	}
 	
 	// button action
-	public void cal_screen(View v) 
+	public void call_screen(View v) 
     {
 		if (mydata.length() > 0) {
         Intent myintent = new Intent(getApplicationContext(), forecast.class);
         myintent.putExtra("data", mydata);
-        myintent.putExtra("bcolor", bcolor);
         startActivity(myintent);  
 		}
     }  
@@ -235,6 +233,7 @@ public class MainActivity extends Activity {
             mydata = result;
         	parse_result(result);
         	progress.dismiss();  
+        	//call_screen(null);
        }
     }
     
@@ -254,42 +253,37 @@ public class MainActivity extends Activity {
                     	 dialog.cancel();
                      }
                  });
- 
-        // Showing Alert Message
-        alertDialog.show();
+         alertDialog.show();
     }
-    
+   
     //Location listener
 	class MyLocationListner implements LocationListener {
-	//	@Override
+		@Override
 		public void onLocationChanged(Location location) {
 			if (location != null) {
 				latitude = location.getLatitude();
 				longitude = location.getLongitude();
 				locationManager.removeUpdates(locationListner);
 				//locationManager = null;
-				//System.out.println(latitude + " " + longitude );
-				//showDialog(latitude + " " + longitude);
 				// call AsynTask to perform network operation on separate thread
 				String myurl = "https://api.forecast.io/forecast/d4234c817b34a6b145ee78345d14e2e9/" +  latitude + "," + longitude;
 	//			Toast.makeText(getBaseContext(), myurl, Toast.LENGTH_LONG).show();
-				//new HttpAsyncTask().execute("https://api.forecast.io/forecast/d4234c817b34a6b145ee78345d14e2e9/37.8267,-122.423");
 				new HttpAsyncTask().execute(myurl);
 			}
 		}
 
-//		@Override
+		@Override
 		public void onProviderDisabled(String arg0) {
 	
 		}
 
-	//	@Override
+		@Override
 		public void onProviderEnabled(String arg0) {
 			// TODO Auto-generated method stub
 
 		}
 
-	//	@Override
+		@Override
 		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
 			// TODO Auto-generated method stub
 
