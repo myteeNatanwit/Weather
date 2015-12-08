@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
 import java.util.Date;
 
 import org.apache.http.HttpResponse;
@@ -17,14 +18,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 
 import android.location.Location;
@@ -35,16 +38,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class MainActivity extends Activity {
 	TextView e_zone;
 	TextView e_icon;
 	TextView e_temp;
 	TextView e_sum;
+	TextView updatefield;
+	ImageButton forecast_btn;
 	TextView e_day1;
 	TextView e_day2;
 	double latitude;
 	double longitude;
 	int  bcolor;
+	String mydata = ""; 
+	ProgressDialog progress; 
+	
 	LocationManager locationManager;
 	LocationListener locationListner;
 	
@@ -52,13 +61,14 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-	
+		progress = ProgressDialog.show(this, "", "");
 		// get reference to the views
 
 		e_zone = (TextView) findViewById(R.id.e_zone);
 		e_icon = (TextView) findViewById(R.id.e_icon);
 		e_temp = (TextView) findViewById(R.id.e_temp);
 		e_sum = (TextView) findViewById(R.id.e_sum);
+		updatefield = (TextView) findViewById(R.id.updatefield);
 		//e_day1 = (TextView) findViewById(R.id.e_day1);
 		//e_day2 = (TextView) findViewById(R.id.e_day2);
 		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/weather.ttf");
@@ -75,8 +85,23 @@ public class MainActivity extends Activity {
 		else{
 			e_zone.setText("You are not connected");
 		}
-	}
+		
+		forecast_btn=(ImageButton)findViewById(R.id.ib);
 
+	}
+	
+	// button action
+	public void cal_screen(View v) 
+    {
+		if (mydata.length() > 0) {
+        Intent myintent = new Intent(getApplicationContext(), forecast.class);
+        myintent.putExtra("data", mydata);
+        startActivity(myintent);  
+		}
+    }  
+
+	
+	
 	// standard Get
 	public static String GET(String url){
 		InputStream inputStream = null;
@@ -119,26 +144,35 @@ public class MainActivity extends Activity {
 	
 	// parse json from GET request	
 	public void parse_result(String result){
+
 		String str;
 		//showDialog("" + result.length());
+		DateFormat df = DateFormat.getDateTimeInstance();
+        float humid;
+        float cloud;
+        float temp; 
 		try {
     		JSONObject json = new JSONObject(result);
     		str =json.getString("timezone");
     		e_zone.setText(str);
     		JSONObject sys  = json.getJSONObject("currently");
-    		str =sys.getString("temperature");
-    		//convert from f to c
-    		Float f= Float.parseFloat(str);
-    		f = (f - 32) * 5/9;
-    		//str = Float.toString(f);
-    		str = String.format("%.00f", f);
+        	String updatedOn = df.format(new Date(sys.getLong("time")*1000));
+        	updatefield.setText("Last update: " + updatedOn);
+    		temp =sys.getInt("temperature");
+    		
+    		//convert from F to c
+    		temp = (temp - 32) * 5/9;
+    		str = String.format("%.00f", temp);
+    		
 			e_temp.setText(str + "c");
 			str = sys.getString("humidity");
-			f= Float.parseFloat(str) * 100;
+			humid = Float.parseFloat(str) * 100;
 			
-    		str = "Summary: " + sys.getString("summary") 
-    			+ "\n" + "Humidity: " + f +"%"
-    			+ "\n" + "Cloud Cover: " + sys.getString("cloudCover") + "%"
+			str = sys.getString("cloudCover");
+			cloud = Float.parseFloat(str) * 100;
+			str = "Summary: " + sys.getString("summary")
+				+ "\n" + "Humidity: " +  String.format("%.00f",humid) +"%"
+    			+ "\n" + "Cloud Cover: " +  String.format("%.00f",cloud) + "%"
     			+ "\n" + "Wind Speed: " + sys.getString("windSpeed");
     		
     	    e_sum.setText(str);
@@ -155,43 +189,8 @@ public class MainActivity extends Activity {
     	    int n = ja.length();
     	    str = "" + n;
     	    //showDialog(str);
-    	    /*
-    	    for (int i = 0, size = n; i < size; i++)
-    	    {
-    	      JSONObject objectInArray = ja.getJSONObject(i);
-    	      str= "" + objectInArray.getString("icon");
-    	      str+= " " + objectInArray.getString("temperatureMin");
-    	      str+= " " + objectInArray.getString("temperatureMax");
-    	      e_day1.setText(str);
-    	    }*/
-    	  /*  
-    	  JSONObject objectInArray = ja.getJSONObject(0);
-    	  long lo = objectInArray.getLong("time");
-    	  lo = lo * 1000;
-    	  java.util.Date dateTime=new java.util.Date(lo);
-    	  
-  	      str= dateTime +" " + objectInArray.getString("icon");
-  	       
-  	      f= Float.parseFloat(objectInArray.getString("temperatureMin"));
-		  f = (f - 32) * 5/9;
-		  str+= " " +String.format("%.00f", f)+ "c";
- 		    	      
-  	      f= Float.parseFloat(objectInArray.getString("temperatureMax"));
-		  f = (f - 32) * 5/9;
-		  str+= " " +String.format("%.00f", f) + "c";
-		  
-  	      e_day1.setText(str);
-  	      objectInArray = ja.getJSONObject(1);
-  	      lo = objectInArray.getLong("time");
-  	      //showDialog("" + lo);
-  	      lo = lo * 1000;
-  	      dateTime= new java.util.Date(lo);
-	      str= dateTime +" " + objectInArray.getString("icon");
-	      str= "" + objectInArray.getString("icon");
-	      str+= " " + objectInArray.getString("temperatureMin");
-	      str+= " " + objectInArray.getString("temperatureMax");
-	      e_day2.setText(str);
-	      */
+    	    
+    	 
     	} catch (JSONException e) {
 			e.printStackTrace();
 			Toast.makeText(getBaseContext(), "fail parse", Toast.LENGTH_LONG).show();
@@ -232,7 +231,9 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(String result) {
  //       	Toast.makeText(getBaseContext(), "Got data from api.forecast.io", Toast.LENGTH_LONG).show();
+            mydata = result;
         	parse_result(result);
+        	progress.dismiss();  
        }
     }
     
@@ -294,6 +295,7 @@ public class MainActivity extends Activity {
 		}
 
 	}	
+	//manual refresh
 	public void refresh(View v) {
 		Toast.makeText(getBaseContext(), "refreshing ...", Toast.LENGTH_LONG).show();
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,

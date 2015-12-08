@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="5dp"
+    android:onClick= "gohome"
+    tools:context=".MainActivity" >
+
+    <TextView
+        android:id="@+id/e_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="icon"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/mobile_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/updatefield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/e_icon"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/e_temp"
+        android:text="updated"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/e_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/e_icon"
+        android:layout_alignBottom="@+id/e_icon"
+        android:layout_alignRight="@+id/e_temp"
+        android:text="zone"
+        android:textSize="28sp" />
+
+    <TextView
+        android:id="@+id/e_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/mobile_list"
+        android:layout_below="@+id/e_zone"
+        android:layout_marginRight="18dp"
+        android:gravity="bottom"
+        android:text="Temperature"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/e_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/e_temp"
+        android:layout_alignLeft="@+id/updatefield"
+        android:layout_below="@+id/e_icon"
+        android:text="Summary"
+        android:textSize="22sp" />
+
+</RelativeLayout>
