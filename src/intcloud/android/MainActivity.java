@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		progress = ProgressDialog.show(this, "", "");
+		progress = ProgressDialog.show(this, "", "Loading...");
 		// get reference to the views
 
 		e_zone = (TextView) findViewById(R.id.e_zone);
@@ -96,6 +96,7 @@ public class MainActivity extends Activity {
 		if (mydata.length() > 0) {
         Intent myintent = new Intent(getApplicationContext(), forecast.class);
         myintent.putExtra("data", mydata);
+        myintent.putExtra("bcolor", bcolor);
         startActivity(myintent);  
 		}
     }  
@@ -131,7 +132,7 @@ public class MainActivity extends Activity {
 	switch (icon_str){
 	case "clear": code = getString(R.string.wi_day_sunny); bcolor = android.graphics.Color.CYAN; break;
 	case "clear-day": code = getString(R.string.wi_day_sunny); bcolor = android.graphics.Color.YELLOW; break;
-	case "clear-night": code = getString(R.string.wi_night_clear); bcolor = android.graphics.Color.DKGRAY; break;
+	case "clear-night": code = getString(R.string.wi_night_clear); bcolor = android.graphics.Color.CYAN; break;
 	case "rain": code = getString(R.string.wi_day_showers); bcolor = android.graphics.Color.GREEN; break;
 	case "wind": code = getString(R.string.wi_day_cloudy_windy); bcolor = android.graphics.Color.CYAN; break;
 	case "fog": code = getString(R.string.wi_day_fog); bcolor = android.graphics.Color.GRAY; break;
@@ -181,7 +182,7 @@ public class MainActivity extends Activity {
     	    e_icon.setText(get_icon_code(str));
     	    RelativeLayout bgElement = (RelativeLayout) findViewById(R.id.container);
     	    bgElement.setBackgroundColor(bcolor);
-    	   
+    	    
     	    //get daily forecast
     	    sys  = json.getJSONObject("daily");
     	    JSONArray ja = new JSONArray();

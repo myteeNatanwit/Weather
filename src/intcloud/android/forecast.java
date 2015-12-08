@@ -36,7 +36,7 @@ public class forecast extends Activity {
 	double latitude;
 	double longitude;
 	int  bcolor;
-	String mydata = ""; 
+	String mydata = "";  
 	
 	   public class List_item {
 		    String theday;
@@ -68,11 +68,14 @@ public class forecast extends Activity {
 			e_icon.setTypeface(tf);
 			
 			
-	    //  ListView listView = (ListView) findViewById(R.id.mobile_list);
-	    //  listView.setAdapter(MyListAdapter);
+			
 	   
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+//        	 RelativeLayout bgElement = (RelativeLayout) findViewById(R.id.forecast);
+
+//	    	 bcolor = Integer.parseInt(extras.getString("bcolor"));
+//	    	 bgElement.setBackgroundColor(bcolor);    	 
             String data= extras.getString("data");
           //  Toast.makeText(getBaseContext(), "" + data.length(), Toast.LENGTH_LONG).show();
            parse_result(data);
