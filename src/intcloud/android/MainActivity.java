@@ -12,10 +12,14 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -75,14 +79,24 @@ public class MainActivity extends Activity {
 	
 		// check if connect to get GPS listener to access weather API
 		if(isConnected()){
+			if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+					!= PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+            }
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			locationListner = new MyLocationListner();
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-					0, locationListner);	
-		//	Toast.makeText(getBaseContext(), "Loading data ...", Toast.LENGTH_LONG).show();
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListner);
+			}
+			Toast.makeText(getBaseContext(), "Loading data ...", Toast.LENGTH_LONG).show();
         }
+
 		else{
 			e_zone.setText("You are not connected");
+
 		}
 		
 		forecast_btn=(ImageButton)findViewById(R.id.ib);
@@ -99,8 +113,8 @@ public class MainActivity extends Activity {
 		}
     }  
 
-	
-	
+
+
 	// standard Get
 	public static String GET(String url){
 		InputStream inputStream = null;
@@ -117,12 +131,13 @@ public class MainActivity extends Activity {
 				result = convertInputStreamToString(inputStream);
 			else
 				result = "Cannot connect";
-		
+
 		} catch (Exception e) {
 			Log.d("InputStream", e.getLocalizedMessage());
 		}
 		return result;
 	}
+
 // get icon code
 	public String get_icon_code(String icon_str){
 	String code = getString(R.string.wi_day_sunny);
@@ -264,12 +279,16 @@ public class MainActivity extends Activity {
 				latitude = location.getLatitude();
 				longitude = location.getLongitude();
 				locationManager.removeUpdates(locationListner);
+				System.out.println(latitude + " " + longitude);
 				//locationManager = null;
 				// call AsynTask to perform network operation on separate thread
 				String myurl = "https://api.forecast.io/forecast/d4234c817b34a6b145ee78345d14e2e9/" +  latitude + "," + longitude;
 	//			Toast.makeText(getBaseContext(), myurl, Toast.LENGTH_LONG).show();
 				new HttpAsyncTask().execute(myurl);
 			}
+			else {
+                System.out.println("fail " + latitude + " " + longitude);
+            }
 		}
 
 		@Override
@@ -293,7 +312,10 @@ public class MainActivity extends Activity {
 	//manual refresh
 	public void refresh(View v) {
 		Toast.makeText(getBaseContext(), "refreshing ...", Toast.LENGTH_LONG).show();
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-				0, locationListner);	
+		if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+				== PackageManager.PERMISSION_GRANTED) {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+					0, locationListner);
+		}
 	}
 }
